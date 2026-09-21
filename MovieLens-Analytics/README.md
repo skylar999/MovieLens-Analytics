@@ -1,21 +1,21 @@
 # MovieLens Analytics
 
-Учебный аналитический проект на Python по датасету MovieLens. Проект исследует фильмы, оценки пользователей, теги и связь идентификаторов MovieLens с IMDb и TMDb.
+An educational data analytics project in Python based on the MovieLens dataset. The project explores movies, user ratings, tags, and the relationship between MovieLens IDs and IMDb/TMDb identifiers.
 
-## Возможности
+## Features
 
-- распределение фильмов по годам и жанрам;
-- поиск фильмов по ID, названию, году и жанру;
-- распределение пользовательских оценок;
-- поиск фильмов с наибольшей средней или медианной оценкой;
-- анализ активности пользователей и дисперсии их оценок;
-- поиск популярных, длинных и многословных тегов;
-- получение IMDb- и TMDb-идентификаторов фильма;
-- формирование ссылки на страницу фильма в IMDb.
+- distribution of movies by year and genre;
+- search for movies by ID, title, year, and genre;
+- distribution of user ratings;
+- finding movies with the highest average or median ratings;
+- analysis of user activity and rating variance;
+- finding popular, long, and multi-word tags;
+- retrieving IMDb and TMDb movie identifiers;
+- generating a link to a movie's IMDb page.
 
-Проект использует только данные из локальных CSV-файлов. Бюджеты, сборы, режиссёры и длительность фильмов в датасет MovieLens не входят, поэтому такая статистика здесь не вычисляется.
+The project uses only data from local CSV files. Movie budgets, box office revenue, directors, and movie runtimes are not included in the MovieLens dataset, so this type of statistics is not calculated.
 
-## Структура проекта
+## Project Structure
 
 ```text
 MovieLens-Analytics/
@@ -34,7 +34,7 @@ MovieLens-Analytics/
     └── test_movielens_analysis.py
 ```
 
-## Установка
+## Installation
 
 ```bash
 git clone https://github.com/skylar999/MovieLens-Analytics.git
@@ -44,25 +44,25 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-В Windows окружение активируется командой:
+On Windows, activate the virtual environment with:
 
 ```bash
 .venv\Scripts\activate
 ```
 
-## Запуск ноутбука
+## Running the Notebook
 
 ```bash
 jupyter notebook src/movielens_report_ready.ipynb
 ```
 
-## Запуск тестов
+## Running Tests
 
 ```bash
 python -m pytest tests
 ```
 
-## Пример использования
+## Example Usage
 
 ```python
 from pathlib import Path
@@ -87,4 +87,8 @@ print(users.top_n_by_ratings_variance(5))
 print(links.get_external_ids("Toy Story"))
 ```
 
-По умолчанию загружается весь датасет. Для быстрого эксперимента можно передать `lines_limit`, например `Ratings(..., lines_limit=1000)`.
+By default, the entire dataset is loaded. For quick experiments, you can pass a `lines_limit` parameter, for example:
+
+```python
+Ratings(..., lines_limit=1000)
+```
