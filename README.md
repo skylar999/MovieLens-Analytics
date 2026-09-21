@@ -1,32 +1,27 @@
 # MovieLens Analytics
 
-Analytical Python project based on the MovieLens dataset. The project explores movies, ratings, users, tags, and external movie identifiers through a reusable Python module, a Jupyter Notebook report, and PyTest tests.
+Учебный аналитический проект на Python по датасету MovieLens. Проект исследует фильмы, оценки пользователей, теги и связь идентификаторов MovieLens с IMDb и TMDb.
 
-## Project Overview
+## Возможности
 
-The project answers practical analytical questions:
+- распределение фильмов по годам и жанрам;
+- поиск фильмов по ID, названию, году и жанру;
+- распределение пользовательских оценок;
+- поиск фильмов с наибольшей средней или медианной оценкой;
+- анализ активности пользователей и дисперсии их оценок;
+- поиск популярных, длинных и многословных тегов;
+- получение IMDb- и TMDb-идентификаторов фильма;
+- формирование ссылки на страницу фильма в IMDb.
 
-- Which movie genres are the most frequent?
-- How are movies distributed by release year?
-- What is the distribution of user ratings?
-- Which movies have the highest average or median rating?
-- Which users are the most inconsistent in their ratings?
-- Which tags are the most popular or descriptive?
-- How can MovieLens IDs be connected with IMDb and TMDb identifiers?
+Проект использует только данные из локальных CSV-файлов. Бюджеты, сборы, режиссёры и длительность фильмов в датасет MovieLens не входят, поэтому такая статистика здесь не вычисляется.
 
-The main logic is implemented in `src/movielens_analysis.py`. The notebook is used as a readable analytical report. Tests are placed separately in `tests/`.
-
-## Repository Structure
+## Структура проекта
 
 ```text
-MovieLens_Analytics/
+MovieLens-Analytics/
 ├── README.md
 ├── requirements.txt
 ├── code-samples/
-│   ├── links.py
-│   ├── movies.py
-│   ├── ratings.py
-│   └── tags.py
 ├── src/
 │   ├── movielens_analysis.py
 │   ├── movielens_report_ready.ipynb
@@ -39,124 +34,57 @@ MovieLens_Analytics/
     └── test_movielens_analysis.py
 ```
 
-## Main Functionality
-
-### Movies
-
-- loading and parsing movie metadata;
-- extracting titles, release years, and genres;
-- searching by ID, title, year, and genre;
-- calculating release-year and genre distributions;
-- finding the oldest, newest, and most genre-diverse movies.
-
-### Ratings
-
-- loading and parsing user ratings;
-- calculating average and median ratings;
-- building rating distributions;
-- finding top movies by rating statistics;
-- analyzing user rating activity.
-
-### Users
-
-- calculating the number of ratings per user;
-- analyzing users by mean and median rating;
-- finding users with the highest rating variance.
-
-### Tags
-
-- loading user-generated tags;
-- finding popular tags;
-- extracting longest and most descriptive tags;
-- searching tags by keyword.
-
-### Links
-
-- loading IMDb and TMDb identifiers;
-- matching MovieLens movies with external IDs;
-- generating IMDb links;
-- running exploratory methods based on linked movie metadata.
-
-The IMDb-related methods are kept as an exploratory extension. The core analytical value of the project is based on local MovieLens CSV files.
-
-## Technologies
-
-- Python 3
-- Jupyter Notebook
-- PyTest
-- CSV data processing
-- Object-oriented programming
-- Exploratory data analysis
-
-## Installation
+## Установка
 
 ```bash
-git clone <repository-url>
-cd MovieLens_Analytics
+git clone https://github.com/skylar999/MovieLens-Analytics.git
+cd MovieLens-Analytics
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-On Windows:
+В Windows окружение активируется командой:
 
 ```bash
-python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
 ```
 
-## Run the Notebook
+## Запуск ноутбука
 
 ```bash
 jupyter notebook src/movielens_report_ready.ipynb
 ```
 
-## Run Tests
+## Запуск тестов
 
 ```bash
 python -m pytest tests
 ```
 
-## Example Usage
+## Пример использования
 
 ```python
 from pathlib import Path
 import sys
 
-PROJECT_ROOT = Path.cwd()
-SRC_DIR = PROJECT_ROOT / "src"
+SRC_DIR = Path("src")
+DATA_DIR = SRC_DIR / "tables"
 sys.path.insert(0, str(SRC_DIR))
 
-from movielens_analysis import Movies, Ratings, Tags, Links, Users
+from movielens_analysis import Links, Movies, Ratings, Tags, Users
 
-DATA_DIR = SRC_DIR / "tables"
-
-movies = Movies(str(DATA_DIR / "movies.csv"))
-ratings = Ratings(str(DATA_DIR / "ratings.csv"), str(DATA_DIR / "movies.csv"))
-tags = Tags(str(DATA_DIR / "tags.csv"))
-links = Links(str(DATA_DIR / "links.csv"), str(DATA_DIR / "movies.csv"))
-users = Users(str(DATA_DIR / "ratings.csv"), str(DATA_DIR / "movies.csv"))
+movies = Movies(DATA_DIR / "movies.csv")
+ratings = Ratings(DATA_DIR / "ratings.csv", DATA_DIR / "movies.csv")
+tags = Tags(DATA_DIR / "tags.csv")
+links = Links(DATA_DIR / "links.csv", DATA_DIR / "movies.csv")
+users = Users(DATA_DIR / "ratings.csv", DATA_DIR / "movies.csv")
 
 print(movies.get_genre_statistics())
 print(ratings.get_rating_distribution())
 print(tags.most_popular(10))
 print(users.top_n_by_ratings_variance(5))
+print(links.get_external_ids("Toy Story"))
 ```
 
-## What This Project Demonstrates
-
-- structuring analytical Python code into reusable classes;
-- reading and processing CSV datasets;
-- performing exploratory data analysis;
-- calculating descriptive statistics;
-- preparing a Jupyter Notebook report;
-- writing PyTest checks for analytical methods;
-- working with real-world dataset relationships.
-
-## Possible Improvements
-
-- Add visualizations for rating distribution, genre frequency, and movies by year.
-- Add a Streamlit or Dash dashboard.
-- Replace exploratory IMDb metadata logic with a real cached dataset or an official API-based pipeline.
-- Add more robust CSV parsing through pandas.
+По умолчанию загружается весь датасет. Для быстрого эксперимента можно передать `lines_limit`, например `Ratings(..., lines_limit=1000)`.
